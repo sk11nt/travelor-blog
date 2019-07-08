@@ -11,6 +11,18 @@
 |
 */
 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
+
 Route::get('/', function () {
     return view('welcome');
+});
+
+Auth::routes([ 'register' => false ]);
+
+
+Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function() {
+    Route::get('/home', 'HomeController@index')->name('home');
+    Route::resource('/posts', 'PostController');
+    Route::resource('/categories', 'CategoryController', ['except' => ['show']]);
 });
